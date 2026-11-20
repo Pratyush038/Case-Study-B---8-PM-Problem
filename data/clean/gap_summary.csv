@@ -1,0 +1,13 @@
+station_id,pollutant,hours_missing,pct_missing,short_gaps_le3h,long_gaps_gt3h,longest_gap_h,station_name
+5548,no2,3358,35.3,112,65,999,BTM Layout
+5548,pm25,3201,33.7,124,59,999,BTM Layout
+5574,no2,4109,43.2,84,80,472,City Railway Station
+5574,pm25,9504,100.0,0,1,9504,City Railway Station
+5607,no2,3527,37.1,97,58,1508,Peenya
+5607,pm25,4503,47.4,134,91,1520,Peenya
+6975,no2,2975,31.3,147,118,382,Silk Board
+6975,pm25,2168,22.8,179,107,242,Silk Board
+6984,no2,2560,26.9,174,86,242,Hebbal
+6984,pm25,2096,22.1,237,75,242,Hebbal
+3409388,no2,5919,62.3,67,68,952,Kasturi Nagar
+3409388,pm25,5938,62.5,64,66,951,Kasturi Nagar

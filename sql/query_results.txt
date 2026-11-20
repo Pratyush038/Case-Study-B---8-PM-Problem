@@ -1,0 +1,127 @@
+
+-- Q1. How big is each table?
+SELECT 'stations' AS tbl, COUNT(*) AS n FROM stations
+UNION ALL SELECT 'calendar', COUNT(*) FROM calendar
+UNION ALL SELECT 'weather_hourly', COUNT(*) FROM weather_hourly
+UNION ALL SELECT 'readings_hourly', COUNT(*) FROM readings_hourly
+UNION ALL SELECT 'reddit_posts', COUNT(*) FROM reddit_posts
+
+            tbl     n
+       stations     6
+       calendar   396
+ weather_hourly  9499
+readings_hourly 38848
+   reddit_posts 11360
+
+------------------------------------------------------------
+-- Q2. (GROUP BY) Average NO2 by hour of day on working days
+SELECT HOUR(r.hour_ts) AS hour, ROUND(AVG(r.no2), 1) AS avg_no2
+FROM readings_hourly r
+JOIN calendar c ON c.date = DATE(r.hour_ts)
+WHERE c.is_weekend = 0 AND c.is_holiday = 0
+GROUP BY HOUR(r.hour_ts)
+ORDER BY hour
+
+ hour  avg_no2
+    0     22.9
+    1     22.6
+    2     22.4
+    3     21.8
+    4     22.0
+    5     22.4
+    6     22.8
+    7     22.9
+    8     22.6
+    9     22.2
+   10     22.2
+   11     22.9
+   12     22.9
+   13     22.9
+   14     23.1
+   15     23.7
+   16     24.6
+   17     25.5
+   18     26.7
+   19     27.4
+   20     26.9
+   21     25.8
+   22     24.3
+   23     23.6
+
+------------------------------------------------------------
+-- Q3. (JOIN + GROUP BY) Station ranking by evening (7 to 10 PM) NO2
+SELECT s.station_name, ROUND(AVG(r.no2), 1) AS evening_no2, ROUND(AVG(r.pm25), 1) AS evening_pm25
+FROM readings_hourly r
+JOIN stations s ON s.station_id = r.station_id
+WHERE HOUR(r.hour_ts) BETWEEN 19 AND 22
+GROUP BY s.station_name
+ORDER BY evening_no2 DESC
+
+        station_name  evening_no2  evening_pm25
+City Railway Station         34.4           NaN
+              Hebbal         29.2          36.0
+       Kasturi Nagar         24.9          37.9
+          Silk Board         23.3          46.6
+          BTM Layout         21.9          31.1
+              Peenya         20.9          19.5
+
+------------------------------------------------------------
+-- Q4. (3-table JOIN) Evening pollution on wet vs dry hours, monsoon working days
+SELECT CASE WHEN w.precipitation >= 0.5 THEN 'raining' ELSE 'dry' END AS hour_type,
+       COUNT(*) AS station_hours,
+       ROUND(AVG(r.no2), 1) AS avg_no2,
+       ROUND(AVG(r.pm25), 1) AS avg_pm25
+FROM readings_hourly r
+JOIN weather_hourly w ON w.hour_ts = r.hour_ts
+JOIN calendar c ON c.date = w.date
+WHERE c.season = 'SW monsoon' AND c.is_weekend = 0 AND c.is_holiday = 0
+  AND HOUR(r.hour_ts) BETWEEN 17 AND 22
+GROUP BY hour_type
+
+hour_type  station_hours  avg_no2  avg_pm25
+      dry           1615     20.5      24.2
+  raining            232     19.8      18.0
+
+------------------------------------------------------------
+-- Q5. Holidays vs normal working days, evening NO2
+SELECT CASE WHEN c.is_holiday = 1 THEN 'holiday'
+            WHEN c.is_weekend = 1 THEN 'weekend'
+            ELSE 'working day' END AS day_type,
+       ROUND(AVG(r.no2), 1) AS evening_no2
+FROM readings_hourly r
+JOIN calendar c ON c.date = DATE(r.hour_ts)
+WHERE HOUR(r.hour_ts) BETWEEN 19 AND 22
+GROUP BY day_type
+
+   day_type  evening_no2
+    weekend         24.9
+working day         26.1
+    holiday         25.5
+
+------------------------------------------------------------
+-- Q6. Reddit: share of commute posts per month next to that month's rain
+SELECT DATE_FORMAT(p.date, '%Y-%m') AS month,
+       COUNT(*) AS posts,
+       ROUND(100 * AVG(p.commute_post), 1) AS pct_commute_posts,
+       ROUND(MAX(m.rain_mm), 0) AS month_rain_mm
+FROM reddit_posts p
+JOIN (SELECT DATE_FORMAT(date, '%Y-%m') AS month, SUM(precipitation) AS rain_mm
+      FROM weather_hourly GROUP BY DATE_FORMAT(date, '%Y-%m')) m
+  ON m.month = DATE_FORMAT(p.date, '%Y-%m')
+GROUP BY DATE_FORMAT(p.date, '%Y-%m')
+ORDER BY month
+
+  month  posts  pct_commute_posts  month_rain_mm
+2025-10   1149                2.4          196.0
+2025-11   1125                1.2           23.0
+2025-12    891                2.0           11.0
+2026-01    917                2.1            4.0
+2026-02    884                1.6            0.0
+2026-03    969                1.5            6.0
+2026-04   1071                6.5            4.0
+2026-05    871                2.4           93.0
+2026-06    793                3.3          101.0
+2026-07    806                2.2           81.0
+2026-08    671                1.2          182.0
+2026-09    602                3.5          121.0
+2026-10    611                1.5           94.0

@@ -1,0 +1,11 @@
+step,rows
+1. raw rows (all pollutants),1351633
+2. only no2 and pm25,234752
+"3. after casting, unreadable rows dropped",234752
+4. duplicates removed,234752
+"5. negatives, zeros and 999+ removed",232543
+6. flat-line runs (4h+) removed,231131
+7. hourly station rows,36746
+8. weather hours,9504
+9. joined air + weather,36746
+10. hour x weekday table,168

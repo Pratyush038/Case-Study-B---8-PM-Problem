@@ -1,0 +1,36 @@
+Workday NO2 5-8 PM: 117% of normal, 7-10 AM: 96%, 2-5 AM: 92%
+Workday PM2.5 evening peak at 21:00 (114%)
+Monsoon workdays compared: {'dry evening': 15, 'rainy evening': 24}
+NO2 dry evening: 5-7 PM 73%, 8-10 PM 74%
+NO2 rainy evening: 5-7 PM 73%, 8-10 PM 83%
+PM2.5 dry evening: 5-7 PM 90%, 8-10 PM 112%
+PM2.5 rainy evening: 5-7 PM 49%, 8-10 PM 50%
+NO2 8-10 PM by station, monsoon workdays (% of normal):
+                       dry  rainy
+station_id                       
+BTM Layout            86.0   86.0
+City Railway Station  83.0   79.0
+Silk Board            61.0   92.0
+Hebbal                66.0   73.0
+Raw mean NO2 by station (µg/m³): BTM Layout 21.3, City Railway Station 32.7, Silk Board 18.9, Hebbal 23.2
+Reddit: 11360 titles on 66 days, 2.5% about traffic or rain
+Commute post share, dry days 1.8% vs any rain 2.8%
+Commute post share by rain band: dry 1.8% (31.0 days), 0-5 mm 2.9% (27.0 days), 5 mm or more 2.3% (8.0 days)
+Deepavali: city PM2.5 hit 412% of normal at 2025-10-20 22:00:00; normal October at that hour 86%. Highest station-hour 156 µg/m³ at Silk Board, 2025-10-20 22:00:00
+Workday 5-9 PM by month (% of normal):
+           no2   pm25
+hour_ts              
+2025-10  107.0   57.0
+2025-11  105.0  123.0
+2025-12  100.0  150.0
+2026-01  147.0  163.0
+2026-02  172.0  145.0
+2026-03  208.0  150.0
+2026-04  179.0  132.0
+2026-05  110.0   91.0
+2026-06   82.0   55.0
+2026-07   74.0   51.0
+2026-08   71.0   55.0
+2026-09   80.0  105.0
+2026-10  103.0   92.0
+Workday 5-9 PM station-hours by PM2.5 category (%): Good 49.3, Satisfactory 37.5, Moderate 10.8, Poor 1.3, Very Poor 1.1, Severe 0.0
